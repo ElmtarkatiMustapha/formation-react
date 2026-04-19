@@ -10,7 +10,7 @@ export default function UserList() {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch('/api/users');
+      const response = await fetch('http://localhost:8181/api/users');
       const data = await response.json();
       setUsers(data);
     } catch (error) {
@@ -21,7 +21,7 @@ export default function UserList() {
   const handleDeleteUser = async (id) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
       try {
-        await fetch(`/api/users/${id}`, { method: 'DELETE' });
+        await fetch(`http://localhost:8181/api/users/${id}`, { method: 'DELETE' });
         fetchUsers();
       } catch (error) {
         console.error('Error deleting user:', error);

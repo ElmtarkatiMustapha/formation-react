@@ -18,7 +18,7 @@ export default function UserAdd() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/users', {
+      const response = await fetch('http://localhost:8181/api/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

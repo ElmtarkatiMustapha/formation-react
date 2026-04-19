@@ -39,7 +39,7 @@ export default function UserEdit() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`/api/users/${id}`, {
+      const response = await fetch(`http://localhost:8181/api/users/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'

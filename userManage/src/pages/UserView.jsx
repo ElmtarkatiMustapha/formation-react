@@ -10,7 +10,7 @@ export default function UserView() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch(`/api/users/${id}`);
+        const response = await fetch(`http://localhost:8181/api/users/${id}`);
         if (response.ok) {
           const data = await response.json();
           setUser(data);
