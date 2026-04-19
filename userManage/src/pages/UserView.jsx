@@ -1,0 +1,34 @@
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import FormUser from '../components/FormUser';
+
+export default function UserView() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await fetch(`/api/users/${id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data);
+        }
+      } catch (error) {
+        console.error('Error fetching user:', error);
+      }
+    };
+    fetchUser();
+  }, [id]);
+  const handleSubmit = (e) => { };
+  const handleChange = (e) => { };
+  if (!user) return <div className="container">Loading...</div>;
+
+  return (
+    <div className="container">
+      <h2>User Details</h2>
+      <FormUser handleSubmit={handleSubmit} formData={user} handleChange={handleChange} disable={true} />
+    </div>
+  );
+}
