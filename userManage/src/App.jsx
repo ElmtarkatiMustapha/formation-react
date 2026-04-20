@@ -1,10 +1,12 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
-import './App.css'
-import Header from './components/Header'
-import UserList from './pages/UserList'
-import UserAdd from './pages/UserAdd'
-import UserEdit from './pages/UserEdit'
-import UserView from './pages/UserView'
+import { Routes, Route, Navigate } from "react-router-dom";
+import "./App.css";
+import Header from "./components/Header";
+import UserList from "./pages/users";
+import UserAdd from "./pages/UserAdd";
+import { UserEdit } from "./pages/UserEdit";
+import UserView from "./pages/UserView";
+
+// create folder per page and move components related to that page in the folder
 
 function App() {
   return (
@@ -12,13 +14,15 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Navigate to="/users" replace />} />
-        <Route path="/users" element={<UserList />} />
-        <Route path="/users/add" element={<UserAdd />} />
-        <Route path="/users/:id/edit" element={<UserEdit />} />
-        <Route path="/users/:id/view" element={<UserView />} />
+        <Route path="/users">
+          <Route index element={<UserList />} />
+          <Route path="add" element={<UserAdd />} />
+          <Route path=":id/edit" element={<UserEdit />} />
+          <Route path=":id/view" element={<UserView />} />
+        </Route>
       </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
