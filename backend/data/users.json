@@ -19,5 +19,12 @@
     "lastName": "mohamed",
     "email": "dev_252025@hotmail.com",
     "phone": "0555-123-4567"
+  },
+  {
+    "id": "419a6b90-2875-4c10-b4b6-8a47ae37c5a8",
+    "firstName": "mustapha",
+    "lastName": "el mtarkati",
+    "email": "mstafamt8@gmail.com",
+    "phone": "0653707131"
   }
 ]

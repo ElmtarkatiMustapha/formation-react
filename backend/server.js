@@ -77,8 +77,8 @@ app.put('/api/users/:id', (req, res) => {
   if (index === -1) return res.status(404).json({ message: 'User not found' });
 
   // Prevent duplicate email (excluding the user being edited)
-  const duplicate = users.find((u) => u.email === email && u.id !== req.params.id);
-  if (duplicate) return res.status(409).json({ message: 'Email already in use' });
+  // const duplicate = users.find((u) => u.email === email && u.id !== req.params.id);
+  // if (duplicate) return res.status(409).json({ message: 'Email already in use' });
 
   users[index] = { ...users[index], firstName, lastName, email, phone };
   writeUsers(users);
