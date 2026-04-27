@@ -3,38 +3,58 @@ import { Link, useNavigate } from "react-router-dom";
 import Button from "../../components/button";
 import Loader from "../../components/loader";
 import { useDispatch, useSelector, useStore } from "react-redux";
+import {
+  fetchUsersSuccess,
+  fetchUsersError,
+  fetchUsersRequest,
+} from "../../business/usersReducer/actions";
+import useDispatchAction from "../../hooks/useDispatchAction";
 
 export default function UserList() {
   // load users from backend
   // a faire => ajouter un loader pendant le chargement des données
   // a faire => ajouter une gestion des erreurs pour afficher une notification à l'utilisateur en cas d'erreur de chargement
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+
+  const {
+    data: users,
+    loading,
+    error,
+  } = useSelector(({ users: { data, loading, error } }) => ({
+    data,
+    loading,
+    error,
+  }));
+
   const navigate = useNavigate();
+
+  const fetchUsersRequestAction = useDispatchAction(fetchUsersRequest);
+  const fetchUsersSuccessAction = useDispatchAction(fetchUsersSuccess);
+  const fetchUsersErrorAction = useDispatchAction(fetchUsersError);
 
   useEffect(() => {
     // setTimeout(() => { fetchUsers()}, 1000);
     fetchUsers();
   }, []);
+
   //fetch the data from server
   const fetchUsers = async () => {
-    setLoading(true);
+    // dispatch(fetchUsersRequest());
+    fetchUsersRequestAction();
     try {
       const response = await fetch("http://localhost:8181/api/users");
       const data = await response.json();
-      setUsers(data);
+
+      // dispatch(fetchUsersSuccess(data));
+      fetchUsersSuccessAction(data);
     } catch (error) {
-      console.error("Error fetching users:", error);
-    } finally {
-      setLoading(false);
+      // dispatch(fetchUsersError(error));
+      fetchUsersErrorAction(error);
     }
   };
   //handle delete user
   const handleDeleteUser = async (id) => {
     // modal de confirmation avant de supprimer un utilisateur
     if (window.confirm("Are you sure you want to delete this user?")) {
-      setLoading(true);
-
       try {
         const isDeleted = await fetch(`http://localhost:8181/api/users/${id}`, {
           method: "DELETE",
@@ -42,12 +62,9 @@ export default function UserList() {
 
         if (isDeleted) {
           fetchUsers();
-          // setUsers(users.filter((user) => user.id !== id));
         }
       } catch (error) {
         console.error("Error deleting user:", error);
-      } finally {
-        setLoading(false);
       }
     }
   };

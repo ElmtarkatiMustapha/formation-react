@@ -1,8 +1,15 @@
-import { ADD_USER, DELETE_USER } from "./actions";
+import {
+  ADD_USER,
+  DELETE_USER,
+  FETCH_USER,
+  FETCH_USERS_SUCCESS,
+  FETCH_USERS_ERROR,
+  FETCH_USERS_REQUEST,
+} from "./actions";
 
 const initialState = {
-  loading: true,
-  users: [],
+  loading: false,
+  data: [],
   error: null,
 };
 
@@ -11,11 +18,33 @@ const usersReducer = (state = initialState, action) => {
 
   switch (type) {
     case ADD_USER:
-      return { ...state, users: [...state.users, payload.user] };
+      return { ...state, data: [...state.data, payload.user] };
     case DELETE_USER:
       return {
         ...state,
-        users: state.users.filter((user) => user.id !== payload.id),
+        users: state.data.filter((user) => user.id !== payload.id),
+      };
+    case FETCH_USERS_SUCCESS:
+      return {
+        ...state,
+        data: payload.users,
+        loading: false,
+        error: null,
+      };
+    case FETCH_USERS_ERROR:
+      return {
+        ...state,
+        data: [],
+        loading: false,
+        error: payload.error,
+      };
+
+    case FETCH_USERS_REQUEST:
+      return {
+        ...state,
+        data: [],
+        loading: true,
+        error: null,
       };
   }
 
