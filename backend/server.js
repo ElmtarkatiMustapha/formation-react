@@ -52,11 +52,6 @@ app.post('/api/users', (req, res) => {
 
   const users = readUsers();
 
-  // Prevent duplicate emails
-  // if (users.some((u) => u.email === email)) {
-  //   return res.status(409).json({ message: 'Email already in use' });
-  // }
-
   const newUser = { id: uuidv4(), firstName, lastName, email, phone };
   users.push(newUser);
   writeUsers(users);
@@ -73,7 +68,7 @@ app.put('/api/users/:id', (req, res) => {
   }
 
   const users = readUsers();
-  const index = users.findIndex((u) => u.id === req.params.id);
+  const index = users.findIndex((u) => u.id == req.params.id);
   if (index === -1) return res.status(404).json({ message: 'User not found' });
 
   // Prevent duplicate email (excluding the user being edited)

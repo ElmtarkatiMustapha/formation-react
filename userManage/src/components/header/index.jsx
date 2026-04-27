@@ -1,3 +1,5 @@
+import Button from "../button";
+
 export default function Header() {
   return (
     <div className='header'>
@@ -5,7 +7,7 @@ export default function Header() {
         <h3>Welcome!</h3>
       </div>
       <div className="right">
-        <button className='btn-danger'>Disconnect</button>
+        <Button label={'Disconnect'} color={'btn-danger'} name={'disconnect'} />
       </div>
     </div>
   )
