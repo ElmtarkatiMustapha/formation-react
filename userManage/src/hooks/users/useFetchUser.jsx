@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 const useFetchUser = (userId) => {
   const [user, setUser] = useState(null);
@@ -9,7 +9,8 @@ const useFetchUser = (userId) => {
     const fetchUser = async () => {
       try {
         const response = await fetch(`/api/users/${userId}`);
-        if (!response.ok) throw new Error('Failed to fetch');
+        console.log({ response });
+        if (!response.ok) throw new Error("Failed to fetch");
         const data = await response.json();
         setUser(data);
       } catch (err) {
