@@ -2,6 +2,8 @@ import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import UserEdit from '.';
+import useFetchUser from '../../../hooks/users/useFetchUser';
+import useAlert from '../../../hooks/alerts/useAlert';
 
 const mockedNavigate = jest.fn();
 const mockedShowAlert = jest.fn();
@@ -33,9 +35,6 @@ jest.mock('../../../hooks/alerts/useAlert', () => ({
   __esModule: true,
   default: jest.fn(),
 }));
-
-const useFetchUser = require('../../../hooks/users/useFetchUser').default;
-const useAlert = require('../../../hooks/alerts/useAlert').default;
 
 const renderPage = () =>
   render(

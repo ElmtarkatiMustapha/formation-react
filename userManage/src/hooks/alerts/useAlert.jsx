@@ -1,5 +1,5 @@
 import { useToast } from '../../contexts/ToastContext';
-
+ 
 const useAlert = () => {
   const { addToast } = useToast();
 

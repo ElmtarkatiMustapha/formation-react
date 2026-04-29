@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import AddUser from '.';
+import useAlert from '../../../hooks/alerts/useAlert';
 
 const mockedNavigate = jest.fn();
 const mockedShowAlert = jest.fn();
@@ -19,8 +20,6 @@ jest.mock('../../../hooks/alerts/useAlert', () => ({
   default: jest.fn(),
 }));
 
-const useAlert = require('../../../hooks/alerts/useAlert').default;
-
 describe('AddUser page', () => {
   const renderPage = () =>
     render(
@@ -37,23 +36,23 @@ describe('AddUser page', () => {
   });
 
   it('renders without crashing', () => {
-    const { container } = renderPage();
-    expect(container).not.toBeEmptyDOMElement();
+    renderPage();
+    expect(screen.getByRole('button', { name: /Save User/i })).toBeTruthy();
   });
 
   it('renders form controls and a submit button', () => {
-    const { container } = renderPage();
-    const inputs = container.querySelectorAll('input, textarea, select');
+    renderPage();
+
+    const inputs = screen.getAllByRole('textbox');
     expect(inputs.length).toBeGreaterThan(0);
-    const buttons = container.querySelectorAll('button');
+    const buttons = screen.getAllByRole('button');
     expect(buttons.length).toBeGreaterThan(0);
   });
 
   it('updates input values when the form fields change', () => {
-    const { container } = renderPage();
+    renderPage();
 
-    const firstNameInput = container.querySelector('input[name="firstName"]');
-    const emailInput = container.querySelector('input[name="email"]');
+    const [firstNameInput, , emailInput] = screen.getAllByRole('textbox');
 
     fireEvent.change(firstNameInput, { target: { value: 'John' } });
     fireEvent.change(emailInput, { target: { value: 'john@example.com' } });
@@ -65,18 +64,20 @@ describe('AddUser page', () => {
   it('submits the form and navigates when the API returns ok', async () => {
     global.fetch.mockResolvedValueOnce({ ok: true });
 
-    const { container } = renderPage();
+    renderPage();
 
-    fireEvent.change(container.querySelector('input[name="firstName"]'), {
+    const [firstNameInput, lastNameInput, emailInput, phoneInput] = screen.getAllByRole('textbox');
+
+    fireEvent.change(firstNameInput, {
       target: { value: 'Jane' },
     });
-    fireEvent.change(container.querySelector('input[name="lastName"]'), {
+    fireEvent.change(lastNameInput, {
       target: { value: 'Doe' },
     });
-    fireEvent.change(container.querySelector('input[name="email"]'), {
+    fireEvent.change(emailInput, {
       target: { value: 'jane.doe@example.com' },
     });
-    fireEvent.change(container.querySelector('input[name="phone"]'), {
+    fireEvent.change(phoneInput, {
       target: { value: '1234567890' },
     });
 

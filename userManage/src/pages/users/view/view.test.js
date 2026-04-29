@@ -1,8 +1,9 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-
 import UserView from ".";
+import useFetchUser from "../../../hooks/users/useFetchUser";
+import useAlert from "../../../hooks/alerts/useAlert";
 
 jest.mock("../../../hooks/users/useFetchUser", () => ({
   __esModule: true,
@@ -13,10 +14,6 @@ jest.mock("../../../hooks/alerts/useAlert", () => ({
   __esModule: true,
   default: jest.fn(),
 }));
-
-// use import instead of require
-const useFetchUser = require("../../../hooks/users/useFetchUser").default;
-const useAlert = require("../../../hooks/alerts/useAlert").default;
 
 describe("UserView", () => {
   const mockedShowAlert = jest.fn();
@@ -41,19 +38,16 @@ describe("UserView", () => {
       error: null,
     });
 
-    const { container } = render(
+    render(
       <MemoryRouter>
         <UserView />
       </MemoryRouter>,
     );
 
-    // get by role
-    expect(container.querySelector('input[name="firstName"]').value).toBe(
-      "John",
-    );
-    expect(container.querySelector('input[name="lastName"]').value).toBe("Doe");
-    expect(container.querySelector('input[name="email"]').value).toBe(
-      "john.doe@example.com",
-    );
+    const [firstNameInput, lastNameInput, emailInput] = screen.getAllByRole("textbox");
+
+    expect(firstNameInput.value).toBe("John");
+    expect(lastNameInput.value).toBe("Doe");
+    expect(emailInput.value).toBe("john.doe@example.com");
   });
 });
