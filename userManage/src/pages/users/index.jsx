@@ -9,48 +9,12 @@ import {
   fetchUsersRequest,
 } from "../../business/usersReducer/actions";
 import useDispatchAction from "../../hooks/useDispatchAction";
+import useUsers from "../../hooks/users/useUsers";
 
 export default function UserList() {
-  // load users from backend
-  // a faire => ajouter un loader pendant le chargement des données
-  // a faire => ajouter une gestion des erreurs pour afficher une notification à l'utilisateur en cas d'erreur de chargement
-
-  const {
-    data: users,
-    loading,
-    error,
-  } = useSelector(({ users: { data, loading, error } }) => ({
-    data,
-    loading,
-    error,
-  }));
-
+  const { users, error, loading } = useUsers();
   const navigate = useNavigate();
 
-  const fetchUsersRequestAction = useDispatchAction(fetchUsersRequest);
-  const fetchUsersSuccessAction = useDispatchAction(fetchUsersSuccess);
-  const fetchUsersErrorAction = useDispatchAction(fetchUsersError);
-
-  useEffect(() => {
-    // setTimeout(() => { fetchUsers()}, 1000);
-    fetchUsers();
-  }, []);
-
-  //fetch the data from server
-  const fetchUsers = async () => {
-    // dispatch(fetchUsersRequest());
-    fetchUsersRequestAction();
-    try {
-      const response = await fetch("http://localhost:8181/api/users");
-      const data = await response.json();
-
-      // dispatch(fetchUsersSuccess(data));
-      fetchUsersSuccessAction(data);
-    } catch (error) {
-      // dispatch(fetchUsersError(error));
-      fetchUsersErrorAction(error);
-    }
-  };
   //handle delete user
   const handleDeleteUser = async (id) => {
     // modal de confirmation avant de supprimer un utilisateur
