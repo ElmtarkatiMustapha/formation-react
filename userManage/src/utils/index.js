@@ -1,6 +1,6 @@
 import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router-dom";
-import { render } from "@testing-library/react";
+import { render, renderHook } from "@testing-library/react";
 
 import store from "../business/store";
 
@@ -10,3 +10,12 @@ export const customRender = (ui) =>
       <Provider store={store}>{ui}</Provider>
     </MemoryRouter>,
   );
+
+export const customRenderHook = (useHook) =>
+  renderHook(useHook, {
+    wrapper: ({ children }) => (
+      <MemoryRouter>
+        <Provider store={store}>{children}</Provider>
+      </MemoryRouter>
+    ),
+  });

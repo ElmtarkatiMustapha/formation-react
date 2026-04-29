@@ -1,7 +1,11 @@
-import '@testing-library/jest-dom';
+import "@testing-library/jest-dom";
 
 // Import TextEncoder/TextDecoder
-import { TextEncoder, TextDecoder } from 'util';
+import { TextEncoder, TextDecoder } from "util";
 
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
+
+beforeEach(() => {
+  globalThis.fetch = jest.fn();
+});
