@@ -5,6 +5,7 @@ import {
   FETCH_USERS_SUCCESS,
   FETCH_USERS_ERROR,
   FETCH_USERS_REQUEST,
+  UPDATE_USER_SUCCESS,
 } from "./actions";
 
 const initialState = {
@@ -35,6 +36,30 @@ const usersReducer = (state = initialState, action) => {
       return {
         ...state,
         data: [],
+        loading: false,
+        error: payload.error,
+      };
+
+    case FETCH_USERS_REQUEST:
+      return {
+        ...state,
+        data: [],
+        loading: true,
+        error: null,
+      };
+
+    case UPDATE_USER_SUCCESS:
+      return {
+        ...state,
+        data: state.data.map((user) =>
+          user.id === payload.user.id ? payload.user : user,
+        ),
+        loading: false,
+        error: null,
+      };
+    case FETCH_USERS_ERROR:
+      return {
+        ...state,
         loading: false,
         error: payload.error,
       };
