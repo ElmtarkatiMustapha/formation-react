@@ -1,24 +1,25 @@
-import React from 'react';
-import { act, render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
-import UserEdit from '.';
-import useFetchUser from '../../../hooks/users/useFetchUser';
-import useAlert from '../../../hooks/alerts/useAlert';
+import React from "react";
+import { act, render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import UserEdit from ".";
+import useFetchUser from "../../../hooks/users/useFetchUser";
+import useAlert from "../../../hooks/alerts/useAlert";
+import { customRender } from "../../../utils";
 
 const mockedNavigate = jest.fn();
 const mockedShowAlert = jest.fn();
 let formUserProps = null;
 
-jest.mock('react-router-dom', () => {
-  const actual = jest.requireActual('react-router-dom');
+jest.mock("react-router-dom", () => {
+  const actual = jest.requireActual("react-router-dom");
   return {
     ...actual,
     useNavigate: () => mockedNavigate,
-    useParams: () => ({ id: '1' }),
+    useParams: () => ({ id: "1" }),
   };
 });
 
-jest.mock('../../../components/formUser', () => ({
+jest.mock("../../../components/formUser", () => ({
   __esModule: true,
   default: ({ handleSubmit, handleChange }) => {
     formUserProps = { handleSubmit, handleChange };
@@ -26,24 +27,19 @@ jest.mock('../../../components/formUser', () => ({
   },
 }));
 
-jest.mock('../../../hooks/users/useFetchUser', () => ({
+jest.mock("../../../hooks/users/useFetchUser", () => ({
   __esModule: true,
   default: jest.fn(),
 }));
 
-jest.mock('../../../hooks/alerts/useAlert', () => ({
+jest.mock("../../../hooks/alerts/useAlert", () => ({
   __esModule: true,
   default: jest.fn(),
 }));
 
-const renderPage = () =>
-  render(
-    <MemoryRouter>
-      <UserEdit />
-    </MemoryRouter>,
-  );
+const renderPage = () => customRender(<UserEdit />);
 
-describe('UserEdit page', () => {
+describe("UserEdit page", () => {
   beforeEach(() => {
     mockedNavigate.mockClear();
     mockedShowAlert.mockClear();
@@ -51,43 +47,52 @@ describe('UserEdit page', () => {
     global.fetch = jest.fn();
   });
 
-  it('renders loading state when user data is being fetched', () => {
+  it("renders loading state when user data is being fetched", () => {
     useFetchUser.mockReturnValue({ user: null, loading: true, error: null });
-    useAlert.mockReturnValue({ showAlert: mockedShowAlert, AlertComponent: null });
+    useAlert.mockReturnValue({
+      showAlert: mockedShowAlert,
+      AlertComponent: null,
+    });
 
     renderPage();
 
     expect(screen.getByText(/Loading.../i)).toBeInTheDocument();
   });
 
-  it('calls handleChange and handleSubmit', async () => {
+  it("calls handleChange and handleSubmit", async () => {
     useFetchUser.mockReturnValue({
       user: {
-        id: '1',
-        firstName: 'Jane',
-        lastName: 'Doe',
-        email: 'jane.doe@example.com',
-        phone: '1234567890',
+        id: "1",
+        firstName: "Jane",
+        lastName: "Doe",
+        email: "jane.doe@example.com",
+        phone: "1234567890",
       },
       loading: false,
       error: null,
     });
-    useAlert.mockReturnValue({ showAlert: mockedShowAlert, AlertComponent: null });
-    global.fetch.mockResolvedValue({ ok: true, json: jest.fn().mockResolvedValue({}) });
+    useAlert.mockReturnValue({
+      showAlert: mockedShowAlert,
+      AlertComponent: null,
+    });
+    global.fetch.mockResolvedValue({
+      ok: true,
+      json: jest.fn().mockResolvedValue({}),
+    });
 
     renderPage();
 
     expect(formUserProps).not.toBeNull();
 
-    const changeEvent = { target: { name: 'firstName', value: 'Alice' } };
+    const changeEvent = { target: { name: "firstName", value: "Alice" } };
     act(() => {
       formUserProps.handleChange(changeEvent);
     });
- 
+
     await act(async () => {
       await formUserProps.handleSubmit({ preventDefault: jest.fn() });
     });
 
-    expect(mockedNavigate).toHaveBeenCalledWith('/users');
+    expect(mockedNavigate).toHaveBeenCalledWith("/users");
   });
 });
