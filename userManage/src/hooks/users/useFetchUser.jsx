@@ -1,26 +1,18 @@
 import { useState, useEffect } from "react";
+import useDispatchAction from "../useDispatchAction";
+import { fetchUserRequest } from "../../business/usersReducer/actions";
+import { useSelector } from "react-redux";
 
 const useFetchUser = (userId) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const {
+    data: user,
+    loading,
+    error,
+  } = useSelector((store) => store.users.selected_user);
+  const fetchuserAction = useDispatchAction(fetchUserRequest);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await fetch(`/api/users/${userId}`);
-        console.log({ response });
-        if (!response.ok) throw new Error("Failed to fetch");
-        const data = await response.json();
-        setUser(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (userId) fetchUser();
+    if (userId) fetchuserAction(userId);
   }, [userId]);
 
   return { user, loading, error };

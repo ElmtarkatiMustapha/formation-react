@@ -1,3 +1,4 @@
+import { data } from "react-router-dom";
 import {
   DELETE_USER,
   FETCH_USER,
@@ -8,12 +9,20 @@ import {
   ADD_USER_REQUEST,
   ADD_USER_SUCCESS,
   ADD_USER_ERROR,
+  FETCH_USER_SUCCESS,
+  FETCH_USER_REQUEST,
+  FETCH_USER_ERROR,
 } from "./actions";
 
 const initialState = {
   loading: false,
   data: [],
   error: null,
+  selected_user: {
+    loading: false,
+    data: null,
+    error: null,
+  },
 };
 
 const usersReducer = (state = initialState, action) => {
@@ -83,6 +92,34 @@ const usersReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: payload.error,
+      };
+    case FETCH_USER_REQUEST:
+      return {
+        ...state,
+        selected_user: {
+          loading: true,
+          error: null,
+          data: null,
+        },
+      };
+    case FETCH_USER_SUCCESS:
+      return {
+        ...state,
+        selected_user: {
+          loading: false,
+          error: null,
+          data: payload.user,
+        },
+      };
+
+    case FETCH_USER_ERROR:
+      return {
+        ...state,
+        selected_user: {
+          loading: false,
+          error: payload.error,
+          data: null,
+        },
       };
   }
 

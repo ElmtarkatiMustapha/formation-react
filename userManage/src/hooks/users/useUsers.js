@@ -26,16 +26,16 @@ const useUsers = () => {
   const fetchUsers = async () => {
     // dispatch(fetchUsersRequest());
     fetchUsersRequestAction();
-    try {
-      const response = await fetch("http://localhost:8181/api/users");
-      const data = await response.json();
+    // try {
+    //   const response = await fetch("http://localhost:8181/api/users");
+    //   const data = await response.json();
 
-      // dispatch(fetchUsersSuccess(data));
-      fetchUsersSuccessAction(data);
-    } catch (error) {
-      // dispatch(fetchUsersError(error));
-      fetchUsersErrorAction(error);
-    }
+    //   // dispatch(fetchUsersSuccess(data));
+    //   fetchUsersSuccessAction(data);
+    // } catch (error) {
+    //   // dispatch(fetchUsersError(error));
+    //   fetchUsersErrorAction(error);
+    // }
   };
 
   useEffect(() => {

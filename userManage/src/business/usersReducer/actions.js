@@ -1,5 +1,12 @@
 export const DELETE_USER = "DELETE_USER";
+
 export const FETCH_USER = "FETCH_USER";
+
+export const FETCH_USER_REQUEST = "FETCH_USER_REQUEST";
+export const FETCH_USER_SUCCESS = "FETCH_USER_SUCCESS";
+export const FETCH_USER_ERROR = "FETCH_USER_ERROR";
+
+export const fetchUserRequest = (id) => ({ type: FETCH_USER_REQUEST, id }); // actionobj = {} react-query => redux & saga & cache
 
 // UPDATE USER ACTIONS
 export const UPDATE_USER_REQUEST = "UPDATE_USER";
@@ -53,8 +60,9 @@ export const ADD_USER_REQUEST = "ADD_USER_REQUEST";
 export const ADD_USER_SUCCESS = "ADD_USER_SUCCESS";
 export const ADD_USER_ERROR = "ADD_USER_ERROR";
 
-export const addUserRequest = () => ({
+export const addUserRequest = (user) => ({
   type: ADD_USER_REQUEST,
+  user,
 });
 
 export const addUserSuccess = (user) => ({
