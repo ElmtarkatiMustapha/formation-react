@@ -1,21 +1,30 @@
 import { useState, useEffect } from "react";
-import useDispatchAction from "../useDispatchAction";
-import { fetchUserRequest } from "../../business/usersReducer/actions";
+import { useQuery } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 
-const useFetchUser = (userId) => {
-  const {
-    data: user,
-    loading,
-    error,
-  } = useSelector((store) => store.users.selected_user);
-  const fetchuserAction = useDispatchAction(fetchUserRequest);
+import useDispatchAction from "../useDispatchAction";
+import { fetchUserRequest } from "../../business/usersReducer/actions";
+import { users_keys } from "./useUsers";
 
-  useEffect(() => {
-    if (userId) fetchuserAction(userId);
-  }, [userId]);
+const useFetchUser = (id) => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: users_keys.details(id),
+    queryFn: async () => {
+      console.log(
+        "____________ FETCHING USER " + id + "_______________________",
+      );
+      const response = await fetch(`/api/users/${id}`);
+      if (!response.ok) throw new Error("error fetching user : " + id);
 
-  return { user, loading, error };
+      return await response.json();
+    },
+    retry: 2,
+    retryDelay: 100,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  });
+
+  return { user: data, loading: isLoading, error: error?.message };
 };
 
 export default useFetchUser;

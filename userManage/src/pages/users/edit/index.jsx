@@ -9,12 +9,15 @@ import {
   updateUserRequest,
   updateUserSuccess,
 } from "../../../business/usersReducer/actions";
+import { useEditUser } from "../../../hooks/users/useUser";
 
 export default function UserEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { showAlert } = useAlert();
   const { user, loading, error: fetchError } = useFetchUser(id);
+
+  const { updateUser } = useEditUser();
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -41,34 +44,13 @@ export default function UserEdit() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   }, []);
 
-  const updateUser = useCallback(async (userId, data) => {
-    updateUserRequestAction(); // fetch + loading true
-
-    const response = await fetch(`/api/users/${userId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      // const errorData = await response.json().catch(() => null);
-      // throw new Error(errorData?.message || "Failed to update user");
-      updateUserErrorAction(errorData?.message || "Failed to update user");
-    }
-
-    const updatedUser = await response.json();
-    updateUserSuccessAction(updatedUser);
-  }, []);
-
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault();
       setIsSubmitting(true);
 
       try {
-        await updateUser(id, formData);
+        await updateUser({ id, formData });
         showAlert("User updated successfully", "success");
         navigate("/users");
       } catch (err) {

@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector, useStore } from "react-redux";
+
 import Button from "../../components/button";
 import Loader from "../../components/loader";
-import { useDispatch, useSelector, useStore } from "react-redux";
 import {
   fetchUsersSuccess,
   fetchUsersError,
@@ -10,26 +11,19 @@ import {
 } from "../../business/usersReducer/actions";
 import useDispatchAction from "../../hooks/useDispatchAction";
 import useUsers from "../../hooks/users/useUsers";
+import { useDeleteUser } from "../../hooks/users/useUser";
 
 export default function UserList() {
-  const { users, error, loading } = useUsers();
+  const { users, error, isLoading: loading } = useUsers();
+  const { deteleUser } = useDeleteUser();
+
   const navigate = useNavigate();
 
   //handle delete user
   const handleDeleteUser = async (id) => {
     // modal de confirmation avant de supprimer un utilisateur
     if (window.confirm("Are you sure you want to delete this user?")) {
-      try {
-        const isDeleted = await fetch(`http://localhost:8181/api/users/${id}`, {
-          method: "DELETE",
-        });
-
-        if (isDeleted) {
-          fetchUsers();
-        }
-      } catch (error) {
-        console.error("Error deleting user:", error);
-      }
+      deteleUser(id, {});
     }
   };
   //handle click on the edit button
@@ -40,6 +34,8 @@ export default function UserList() {
   const handleViewClick = (id) => {
     navigate(`/users/${id}/view`);
   };
+
+  if (error) return <span>{error.message}</span>;
 
   return loading ? (
     <Loader />

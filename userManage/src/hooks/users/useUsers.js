@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useQuery } from "@tanstack/react-query";
 
 import {
   fetchUsersError,
@@ -8,43 +8,29 @@ import {
 } from "../../business/usersReducer/actions";
 import useDispatchAction from "../useDispatchAction";
 
+export const users_keys = {
+  list: () => ["users"],
+  details: (id) => ["users", "details", id],
+};
+
 const useUsers = () => {
-  const {
-    data: users,
-    loading,
-    error,
-  } = useSelector(({ users: { data, loading, error } }) => ({
-    data,
-    loading,
-    error,
-  }));
+  const { data, isLoading, error } = useQuery({
+    queryKey: users_keys.list(),
+    queryFn: async () => {
+      console.log("___fetching users ____ use query");
+      const response = await fetch("http://localhost:8181/api/users");
 
-  const fetchUsersRequestAction = useDispatchAction(fetchUsersRequest);
-  const fetchUsersSuccessAction = useDispatchAction(fetchUsersSuccess);
-  const fetchUsersErrorAction = useDispatchAction(fetchUsersError);
+      if (!response.ok) throw new Error("error fetching users");
 
-  const fetchUsers = async () => {
-    // dispatch(fetchUsersRequest());
-    fetchUsersRequestAction();
-    // try {
-    //   const response = await fetch("http://localhost:8181/api/users");
-    //   const data = await response.json();
+      return await response.json();
+    },
+    retry: 2,
+    retryDelay: 100,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  });
 
-    //   // dispatch(fetchUsersSuccess(data));
-    //   fetchUsersSuccessAction(data);
-    // } catch (error) {
-    //   // dispatch(fetchUsersError(error));
-    //   fetchUsersErrorAction(error);
-    // }
-  };
-
-  useEffect(() => {
-    if ((users || []).length === 0) {
-      fetchUsers();
-    }
-  }, []);
-
-  return { users, loading, error };
+  return { users: data, isLoading, error };
 };
 
 export default useUsers;

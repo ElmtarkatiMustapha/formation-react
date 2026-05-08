@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import FormUser from "../../../components/formUser";
 import Loader from "../../../components/loader";
 import useAlert from "../../../hooks/alerts/useAlert";
 import useUsers from "../../../hooks/users/useUsers";
-import useUser from "../../../hooks/users/useUser";
+import { useAddUser } from "../../../hooks/users/useUser";
 
 export default function UserAdd() {
   const { showAlert } = useAlert();
-  const { addUser } = useUser();
+  const { addUser } = useAddUser();
 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -26,10 +27,15 @@ export default function UserAdd() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (addUser(formData)) {
-      showAlert("User added successfully", "success");
-      navigate("/users");
-    } else showAlert(error.message || "An error occurred", "error");
+    await addUser(formData, {
+      onSuccess: () => {
+        showAlert("User added successfully", "success");
+        navigate("/users");
+      },
+      onError: () => {
+        showAlert("An error occurred", "error");
+      },
+    });
   };
 
   return loading ? (
