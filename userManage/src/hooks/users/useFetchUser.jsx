@@ -10,9 +10,7 @@ const useFetchUser = (id) => {
   const { data, isLoading, error } = useQuery({
     queryKey: users_keys.details(id),
     queryFn: async () => {
-      console.log(
-        "____________ FETCHING USER " + id + "_______________________",
-      );
+      console.log({ _______________: id });
       const response = await fetch(`/api/users/${id}`);
       if (!response.ok) throw new Error("error fetching user : " + id);
 
@@ -22,6 +20,7 @@ const useFetchUser = (id) => {
     retryDelay: 100,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
+    enabled: !!id,
   });
 
   return { user: data, loading: isLoading, error: error?.message };

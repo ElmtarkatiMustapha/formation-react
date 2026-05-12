@@ -1,4 +1,3 @@
-// add tests
 export function UserRow({ user, handleShowUserDetails, handleDeleteUser }) {
   return (
     <tr>
