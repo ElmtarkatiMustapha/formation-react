@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 import FormUser from "../../../components/formUser";
 import useFetchUser from "../../../hooks/users/useFetchUser";
 import Loader from "../../../components/loader";
@@ -13,11 +13,10 @@ export default function UserView() {
   useEffect(() => {
     if (fetchError) showAlert(fetchError, "error");
   }, [fetchError, showAlert]);
- 
-  return (
-    loading? 
-    <Loader/> 
-    :
+
+  return loading ? (
+    <Loader />
+  ) : (
     <div className="container">
       <h2>User Details</h2>
       <FormUser

@@ -1,10 +1,10 @@
-import EditUser from ".";
+import UserView from ".";
 
 let originalFetch = globalThis.fetch;
 
 export default {
-  title: "pages/edit-user",
-  component: EditUser,
+  title: "pages/view-user",
+  component: UserView,
   beforeEach() {
     globalThis.fetch = async (url) => {
       console.log("[MOCK FETCH USER]", url);
@@ -35,16 +35,16 @@ export default {
   },
 };
 
-export const withSuccess = {
+export const displayUserWithSuccess = {
   parameters: {
-    path: "/users/1/edit",
-    pathname: "/users/:id/edit",
+    path: "/users/1/view",
+    pathname: "/users/:id/view",
   },
 };
 
-export const withError = {
+export const displayUserWithError = {
   parameters: {
-    path: "/users/2/edit",
-    pathname: "/users/:id/edit",
+    path: "/users/2/view",
+    pathname: "/users/:id/view",
   },
 };

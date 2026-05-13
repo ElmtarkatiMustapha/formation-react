@@ -9,20 +9,20 @@ const config = {
     "@storybook/addon-onboarding",
   ],
   framework: "@storybook/react-vite",
-  // babel: async (options) => ({
-  //   ...options,
-  //   plugins: [
-  //     ...options.plugins,
-  //     ["@babel/plugin-transform-react-jsx", { runtime: "automatic" }],
-  //   ],
-  //   overrides: [
-  //     {
-  //       test: /\.js$/,
-  //       plugins: [
-  //         ["@babel/plugin-transform-react-jsx", { runtime: "automatic" }],
-  //       ],
-  //     },
-  //   ],
-  // }),
+  babel: async (options) => ({
+    ...options,
+    plugins: [
+      ...options.plugins,
+      ["@babel/plugin-transform-react-jsx", { runtime: "automatic" }],
+    ],
+    overrides: [
+      {
+        test: /\.js$/,
+        plugins: [
+          ["@babel/plugin-transform-react-jsx", { runtime: "automatic" }],
+        ],
+      },
+    ],
+  }),
 };
 export default config;
